@@ -1,0 +1,32 @@
+= Demo Documentation Component A
+:url-project: https://freighttrust.com
+:url-docs: https://codes.freighttrust.com
+:url-org: https://github.com/freight-trust
+:url-group: {url-org}/codes
+:url-site-readme: {url-group}/docs-site/blob/master/README.adoc
+:url-freighttrust: https://freighttrust.com
+
+Generic Component
+
+The playbook and instructions are located in {url-site-readme}[Freight Trust & Clearing Corporation].
+
+== Resources
+
+* {url-project}[Freight Trust Network Project]
+* {url-docs}[Freight Trust Docs]
+* {url-org}[Freight Trust & Clearing Repositories]
+
+== Copyright and License
+
+Copyright (C) 2020 FreightTrust & Clearing Corporation. and individual Freight Trust Network Project contributors.
+
+Use of this documentation is granted under the terms of the https://spdx.org/licenses/CC-BY-NC-ND-2.5.html[CC-NC-ND:2.5] (CC-NC-ND:2.5).
+
+## SPDX
+CC-BY-NC-ND-2.5
+	Creative Commons Attribution Non Commercial No Derivatives 2.5 Generic
+
+
+== Authors
+
+Development of the Freight Trust Network is led and sponsored by {url-freighttrust}[FreightTrust & Clearing Corporation].
