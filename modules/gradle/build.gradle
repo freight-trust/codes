@@ -1,0 +1,183 @@
+/*
+ * Copyright 2013-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and`
+ * limitations under the License.
+ */
+
+plugins {
+    id 'com.gradle.build-scan' version '2.0.2'
+    id 'com.jfrog.bintray' version '1.8.0' apply false
+    id 'net.nemerosa.versioning' version '2.6.1' apply false
+    id 'com.github.ben-manes.versions' version '0.17.0' apply false
+    id 'com.gradle.plugin-publish' version '0.11.0' apply false
+    id 'com.github.hierynomus.license' version '0.14.0' apply false
+    id 'com.github.kt3k.coveralls' version '2.8.2' apply false
+    id 'net.ossindex.audit' version '0.1.1' apply false
+    id 'org.kordamp.jdeps' version '0.2.0' apply false
+    id 'fi.linuxbox.download.worker' version '0.3' apply false
+    id 'org.ysb33r.ivypot' version '0.11' apply false
+    id 'org.ysb33r.os' version '0.9' apply false
+    id 'org.ysb33r.cloudci' version '2.5' apply false
+    id 'org.ysb33r.cloudci.appveyor.testreporter' version '2.5' apply false
+    id 'org.ysb33r.gradletest' version '2.0-rc.4' apply false
+    id 'idea'
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+
+    buildFinished { buildResult ->
+        buildScanPublished { scan ->
+            ['curl', '-s', '-d', "message=asciidoctor-gradle-plugin build scan: ${scan.buildScanUri}", 'https://webhooks.gitter.im/e/6ba348eef26407adc22a'].execute()
+        }
+    }
+}
+
+
+import org.gradle.util.GradleVersion
+import java.text.SimpleDateFormat
+
+apply plugin: 'net.nemerosa.versioning'
+
+ext {
+    buildTimeAndDate = new Date()
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+    buildRevision = versioning.info.commit
+    buildCreatedBy = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString()
+}
+
+allprojects {
+    ext {
+        offlineRepoRoot = file("${project(':testfixtures-offline-repo').buildDir}/repo")
+        offlineRepoBinariesRoot = file("${offlineRepoRoot}/binaries")
+        offlineRepoDescriptionFile = file("${offlineRepoRoot}/repositories.gradle")
+
+        withoutIntegrationTests = [
+            'kindlegen-gradle'
+        ]
+
+        withoutCompatibilityTests = [
+            'kindlegen-gradle'
+        ]
+
+        withoutCodeCoverage = [
+        ]
+    }
+}
+
+subprojects {
+
+    apply plugin: AsciidoctorGradleModuleVersions
+    apply plugin: 'org.ysb33r.os'
+
+    if (project.name != 'testfixtures-offline-repo') {
+        apply plugin: 'groovy'
+        apply plugin: 'idea'
+        apply plugin: 'org.ysb33r.cloudci.appveyor.testreporter'
+
+        if (!project.name.startsWith('testfixture')) {
+
+            apply plugin: AsciidoctorGradlePluginProject
+            apply plugin: 'maven-publish'
+            apply plugin: 'com.github.ben-manes.versions'
+            apply plugin: 'net.ossindex.audit'
+            apply plugin: 'org.kordamp.jdeps'
+            apply plugin: 'org.ysb33r.ivypot.binary.base'
+
+            if (!(project.name in withoutCodeCoverage)) {
+                apply plugin: 'jacoco'
+
+                jacoco {
+                    if (JavaVersion.current().isJava11Compatible() && GradleVersion.version(toolVersion) < GradleVersion.version('0.8.2')) {
+                        toolVersion = '0.8.2'
+                    }
+                }
+            }
+        }
+
+        apply from: "${rootProject.projectDir}/gradle/standard-repositories.gradle"
+        apply from: "${rootProject.projectDir}/gradle/code-quality.gradle"
+
+        if (!project.name.startsWith('testfixture')) {
+
+            if (!(project.name in withoutIntegrationTests)) {
+                apply from: "${rootProject.projectDir}/gradle/integration-tests.gradle"
+            }
+
+            apply from: "${rootProject.projectDir}/gradle/credentials.gradle"
+            apply from: "${rootProject.projectDir}/gradle/publishing.gradle"
+            apply from: "${rootProject.projectDir}/gradle/gradle-plugin-dependencies.gradle"
+            apply from: "${rootProject.projectDir}/gradle/gradle-plugin-documentation.gradle"
+            apply from: "${rootProject.projectDir}/gradle/ci.gradle"
+
+            if (project.name.startsWith('asciidoctor-gradle-jvm')) {
+                apply from: "${rootProject.projectDir}/gradle/asciidoctorj-versions.gradle"
+                apply from: "${rootProject.projectDir}/gradle/jruby-versions.gradle"
+            }
+
+            dependencyUpdates.resolutionStrategy = {
+                componentSelection { rules ->
+                    rules.all { selection ->
+                        boolean rejected = ['beta', 'rc', 'cr', 'm'].any { qualifier ->
+                            selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+                        }
+                        if (rejected) {
+                            selection.reject('Release candidate')
+                        }
+                    }
+                }
+            }
+
+            audit {
+                failOnError = false
+            }
+
+            if (!(project.name in withoutCompatibilityTests)) {
+                apply from: "${rootProject.projectDir}/gradle/compatibility-tests.gradle"
+            }
+        }
+
+        compileGroovy {
+            sourceCompatibility = project.sourceCompatibility
+            targetCompatibility = project.targetCompatibility
+        }
+
+        project.tasks.withType(Test) {
+            testLogging {
+                afterSuite { desc, result ->
+                    if (!desc.parent) {
+                        println "Test results ${project.name}: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
+                    }
+                }
+            }
+        }
+    }
+}
+
+apply from: 'gradle/coveralls.gradle'
+
+task syncWrapper( type : Copy ) {
+    from 'gradle', {
+        include 'wrapper/**'
+    }
+    into 'docs/gradle'
+}
+
+wrapper {
+    finalizedBy syncWrapper
+}
+
+tasks.idea.dependsOn syncWrapper
+
