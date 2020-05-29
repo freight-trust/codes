@@ -1,0 +1,6 @@
+name: component-edi
+title: Electronic Data Interchange
+version: 3.0.0
+start_page: ROOT:inline-text-formatting.adoc
+nav:
+- modules/ROOT/nav.adoc
