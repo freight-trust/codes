@@ -1,4 +1,4 @@
-= Demo Documentation Component A
+= Consolidated Omnibus Documentation and Engineering Specifications
 :url-project: https://freighttrust.com
 :url-docs: https://codes.freighttrust.com
 :url-org: https://github.com/freight-trust
@@ -6,9 +6,102 @@
 :url-site-readme: {url-group}/docs-site/blob/master/README.adoc
 :url-freighttrust: https://freighttrust.com
 
-Generic Component
+Consolidated Omnibus Documentation and Engineering Specifications, "CODES"
+
 
 The playbook and instructions are located in {url-site-readme}[Freight Trust & Clearing Corporation].
+
+**Migration to the new CODES format for documentation is on-going, below is a detail of the previous versioned release of the rulebook and associated documentation**
+
+== Migration Details
+
+    - RuleBook:
+          - Overview: rulebook-toc.md
+          - Define. Terms: define-terms.md
+          - Governing Laws: rulebook/0-governing-laws.md
+          - General: rulebook/1-general.md
+          - Governance: rulebook/2-governance.md
+          - Network Participants: rulebook/3-network-clearing-participants.md
+          - Delivery and Settlement: rulebook/4-delivery-and-settlement.md
+          - Obligations: rulebook/5-obligations.md
+          - Suspension: rulebook/6-suspension.md
+          - Rules of Behavior: rules-of-behavior.md
+          - Bylaws: corporate/bylaws.md
+          - Code of Conduct: corporate/code-of-conduct.md
+    - Freight:
+          - Bill of Lading: freight-docs/bill-of-lading/README.md
+          - INCO Terms: freight-docs/incoterms.md
+          - Covenant: covenant.md
+          - Define Terms: freight-docs/define-terms.md
+    - INCO Terms:
+          - Payterms: payterms.md
+    - Bill of Lading:
+          - Legacy Process: demateralizing-process.md
+          - Legal Parity: legal-parity.md
+          - Bill of Lading Rules: bill-of-lading/bill-of-lading-rules.md
+          - Non Negotiable: bill-of-lading/non-negotiable-bol.md
+          - Master Agreement: bill-of-lading/transporation-master-agreement-pro-shipper.md
+    - Customs:
+          - Power of Attorney: customs/customs-broker-power-of-attorney.md
+    - Warehousing:
+          - Warehouse Receipts: warehouse/non-negotiable-warehouse-receipt.md
+    - Blockchain:
+          - Network Design: blockchain/vbsm.md
+          - Token Use Cases: blockchain/token-overview.md
+          - Token Mechanics: blockchain/token-mechanics.md
+          - Token Utility: blockchain/pricing.md
+          - Token Staking: blockchain/staking.md
+          - Virtual Machine: blockchain/evm.md
+          - Staking: staking.md
+          - Genesis File: spec/genesis.md
+          - What are EDI messages?: blockchain/explain-edi.md
+          - Network Upgrade: blockchain/network-upgrade.md
+          - Appendix: blockchain/add-metamask.md
+    - Network:
+          - Network vs. Node: Concepts/Network-vs-Node.md
+          - Architecture: Concepts/ArchitectureOverview.md
+          - Network vs Chain: Concepts/NetworkID-And-ChainID.md
+          - Monitoring: Concepts/Monitoring.md
+    - API:
+          - GraphQL: api/graphql.md
+          - Besu Postman: global/Postman.md
+          - Besu API: HowTo/Interact/APIs/API.md
+          - JSON RPC: HowTo/Interact/APIs/Using-JSON-RPC-API.md
+          - EEAJS: HowTo/Interact/Client-Libraries/eeajs.md
+          - API Methods: Reference/API-Methods.md
+          - API Objects: Reference/API-Objects.md
+          - Solidity ABI: api/UniversalABI.md
+          - DApp: api/dapp.md
+    - EDI:
+          - What is EDI?": edi/what-is-edi.md
+          - Gateway: edi/edi_gateway.md
+          - Trading Partner: edi/trading_partner.md
+          - Layout Codes: edi/record_layout_codes.md
+          - Data Struct: edi/data_file_struct.md
+    - Besu:
+          - Get Started: HowTo/Deploy/Starting-node.md
+          - Find and Connect: HowTo/Deploy/Bootnodes.md
+          - Validators: HowTo/Deploy/Validators.md
+          - Upgrade Node: HowTo/Upgrade/Upgrade-Node.md
+          - Upgrade Protocol: HowTo/Upgrade/Upgrade-Protocol.md
+          - Develop Dapps: HowTo/Develop-Dapps/Truffle.md
+          - Command Line: Reference/CLI/CLI-Subcommands.md
+          - Resources: Reference/Resources.md
+          - GitHub: besu/list.md
+    - Baseline:
+          - Overview: baseline/SUMMARY.md
+          - Protocol: baseline/baseline-protocol/protocol.md
+          - Process: baseline/baseline-protocol/process.md
+          - Ethereum Foundation: baseline/baseline-protocol/mainnet.md
+    - Dogma:
+          - Central Dogma: whitepapers/central-dogma.md
+          - Design of Rulebook: whitepapers/on-design-considerations-for-rulebook.md
+          - Regulatory Framework: whitepapers/similarities-to-existing-regulatory-frameworks.md
+          - Business Continiuty: whitepapers/safety-and-continiuty.md
+          - Crypto Regulatory System: whitepapers/regulatory-framework.md
+          - Legal Requirements: whitepapers/legal-structure.md
+          - Leximatics: whitepapers/alternative-neutral-legal-framework.md
+          - Legal Parity: legal-parity.md
 
 == Resources
 
@@ -23,8 +116,9 @@ Copyright (C) 2020 FreightTrust & Clearing Corporation. and individual Freight T
 Use of this documentation is granted under the terms of the https://spdx.org/licenses/CC-BY-NC-ND-2.5.html[CC-NC-ND:2.5] (CC-NC-ND:2.5).
 
 ## SPDX
-CC-BY-NC-ND-2.5
-	Creative Commons Attribution Non Commercial No Derivatives 2.5 Generic
+CC-BY-NC-ND-2.5. 
+
+	Creative Commons Attribution Non Commercial No Derivatives 2.5 Generic. 
 
 
 == Authors
